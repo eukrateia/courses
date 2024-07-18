@@ -1,4 +1,5 @@
 (function () {  // create global variables to be used in any part of the game
+  console.log('beginning of function');
   // create global variables to be used in any part of the game
   let canvas; // variable to reference DOM element (<canvas>)
   let canvasContext; // variable to assign drawing methods (or functions)
@@ -38,7 +39,6 @@
       player2Score = 0;
       showingWinScreen = false;
     }
-
   }
 
   // this is where the game starts once the page is ready
@@ -52,7 +52,7 @@
     canvasContext = canvas.getContext('2d');
 
     // set game default font type & size
-    canvasContext.font = "30px Arial";
+    canvasContext.font = '30px Arial';
 
     // create local FPS variable and assign initial value
     //   this determines how often calculations & the screen are updated
