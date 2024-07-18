@@ -65,6 +65,9 @@
       // assign '2d' drawing methods to canvasContext (global variable)
       canvasContext = canvas.getContext('2d');
 
+      // set game default font type & size
+      canvasContext.font = "30px Arial";
+
       // create local FPS variable and assign initial value
       //   this determines how often calculations & the screen are updated
       //   (the higher the number, the faster the game will process)
