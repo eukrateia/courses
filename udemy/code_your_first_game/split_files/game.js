@@ -223,4 +223,4 @@
     canvasContext.fillStyle = drawColor;
     canvasContext.fillRect(leftX, topY, width, height);
   }
-});
+})();
