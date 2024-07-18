@@ -5,7 +5,7 @@
   let canvasContext; // variable to assign drawing methods (or functions)
 
   let ballX = 50; // variable for ball X position
-  let ballY = 50; // variable for ball Y position - what is this?
+  let ballY = 50; // variable for ball Y position
 
   let ballSpeedX = 10; // variable for ball speed in X direction
   let ballSpeedY = 4; // variable for ball speed in Y direction
