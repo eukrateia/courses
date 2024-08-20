@@ -19,7 +19,7 @@ def response(status, headers, body):
 
     Args:
         status (str): The HTTP status code and message.
-        headers (dict): A dictionart of HTTP headers.
+        headers (dict): A dictionary of HTTP headers.
         body (str): The response body.
 
     Returns:
@@ -37,7 +37,7 @@ def handle_request(request, files=None):
 
     Args:
         request (list): A list containing the HTTP request data.
-        files (str, optional): the path to the directory containing
+        files (str, optional): The path to the directory containing
                                files to be served. Defaults to None.
 
     Returns:
@@ -62,7 +62,7 @@ def handle_request(request, files=None):
             body=content
         )
 
-    elif method == "GET" and path.starswith('/user-agent'):
+    elif method == "GET" and path.startswith('/user-agent'):
         content = request[2].split(": ")[1]
         res = response(
             status=HTTP_STATUS_OK,
@@ -77,9 +77,7 @@ def handle_request(request, files=None):
             content = request[-1]
             handle_files(
                 file_name=file_name,
-                file_content=content,
-                mode="write"
-            )
+                file_content=content, mode="write")
 
             res = response(
                 status=HTTP_STATUS_CREATED,
@@ -89,14 +87,12 @@ def handle_request(request, files=None):
             )
         else:
             file_content = handle_files(
-                file_name=file_name,
-                mode="read"
-            )
+                file_name=file_name, mode="read")
             if file_content:
                 res = response(
                     status=HTTP_STATUS_OK,
-                    headers={"Content-Type": "text/plain",
-                            "Content-Length": len(file_content)},
+                    headers={"Content-Type": "application/octet-stream",
+                             "Content-Length": len(file_content)},
                     body=file_content
                 )
             else:
@@ -105,12 +101,20 @@ def handle_request(request, files=None):
                     headers={},
                     body=""
                 )
-            return res
+
+    else:
+        res = response(
+            status=HTTP_STATUS_NOT_FOUND + "\r\n",
+            headers={},
+            body=""
+        )
+
+    return res
 
 
 def handle_files(file_name, file_content=None, mode="read"):
     if mode == 'write':
-        with open(f"{FILES_DIR}{FILE_NAME}", "w", encoding='UTF8') as f:
+        with open(f"{FILES_DIR}{file_name}", "w", encoding='UTF8') as f:
             file = f.write(file_content)
 
     else:
@@ -136,7 +140,7 @@ def handle_client(conn, addr):
     """
     request = conn.recv(4096).decode(
         ).splitlines()
-    
+
     conn.send(handle_request(request))
     conn.close()
 
