@@ -25,6 +25,13 @@ def response(status, headers, body):
     Returns:
         bytes: The encoded HTTP response.
     """
+    sts = status.splitlines()[0]
+    print(f"DH00080: response.status = {sts}")
+    print(f"DH00081: response.headers =")
+    for k, v in headers.items():
+        print(f"   -> {k}, {v}")
+    print(f"DH00082: response.body = {body}")
+
     return (status +
             "".join(f"{k}: {v}\r\n" for k, v in headers.items()) +
             "\r\n" +
@@ -140,50 +147,57 @@ def handle_client(conn, addr):
     """
     request = conn.recv(4096).decode(
         ).splitlines()
-
+    
     conn.send(handle_request(request))
     conn.close()
+
+    # console msg waiting
+    print("DH00090: Waiting for client connection...")
 
 
 def main(args):
 
-    # console program title
+    # console msg program title
     print("")
     print("  >>> DGD HTTP Server Python <<<")
     print("")
 
-    # console server start
-
-    log_x = 1
-    print(f"{log_x} LogID_10: Server Start")
+    # console msg server start
+    print("DH00010: Server Start")
     
 
     # bind to cont PORT (4221)
     server_socket = socket.create_server((HOST, PORT), reuse_port=True)
     
-    # console listening port
-    log_x += 1
-    print(f"{log_x} LogID_20: Server is running on port {PORT}")
+    # console msg listening port
+    print("DH00020: Server is running on port {PORT}")
 
     if args:
         global FILES_DIR
         FILES_DIR = args[1]
 
-    while True:
+    try:
+        while True:
 
-        log_x += 1
-        print(f"{log_x} LogID_30: Waiting for client connection...")
-        conn, addr = server_socket.accept() # wait for client
+            # console msg waiting
+            print("DH00030: Waiting for client connection...")
 
-        thread = threading.Thread(target=handle_client, args=(conn, addr))
+            conn, addr = server_socket.accept() # wait for client
 
-        log_x += 1
-        print(f"{log_x} LogID_40:")
-        print(f"   -> conn: {conn}")
-        print(f"   -> addr: {addr}")
-        print(f"   -> thread: {thread}")
+            thread = threading.Thread(target=handle_client, args=(conn, addr))
 
-        thread.start()
+            print("DH00040: Connection established")
+            print(f"   -> conn: {conn}")
+            print(f"   -> addr: {addr}")
+            print(f"   -> thread: {thread}")
+
+            thread.start()
+    except KeyboardInterrupt:
+        print("\nDH00050: Server is shutting down.")
+    finally:
+        # clean up the server socket
+        server_socket.close()
+        print("DH00060: Server has been shut down.")
 
 
 
