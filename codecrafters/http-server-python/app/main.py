@@ -146,15 +146,42 @@ def handle_client(conn, addr):
 
 
 def main(args):
+
+    # console program title
+    print("")
+    print("  >>> DGD HTTP Server Python <<<")
+    print("")
+
+    # console server start
+
+    log_x = 1
+    print(f"{log_x} LogID_10: Server Start")
+    
+
+    # bind to cont PORT (4221)
     server_socket = socket.create_server((HOST, PORT), reuse_port=True)
+    
+    # console listening port
+    log_x += 1
+    print(f"{log_x} LogID_20: Server is running on port {PORT}")
+
     if args:
         global FILES_DIR
         FILES_DIR = args[1]
 
     while True:
+
+        log_x += 1
+        print(f"{log_x} LogID_30: Waiting for client connection...")
         conn, addr = server_socket.accept() # wait for client
 
         thread = threading.Thread(target=handle_client, args=(conn, addr))
+
+        log_x += 1
+        print(f"{log_x} LogID_40:")
+        print(f"   -> conn: {conn}")
+        print(f"   -> addr: {addr}")
+        print(f"   -> thread: {thread}")
 
         thread.start()
 
